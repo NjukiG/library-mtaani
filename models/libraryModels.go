@@ -18,6 +18,12 @@ type Author struct {
 	Books []Book `gorm:"foreignKey:AuthorID"`
 }
 
+type Category struct {
+	gorm.Model
+	Title string
+	Books []Book `gorm:"foreignKey:CategoryID"`
+}
+
 type Book struct {
 	gorm.Model
 	Title       string
@@ -25,7 +31,9 @@ type Book struct {
 	Price       float64
 	Copies      int64
 	Description string
+	Trending    bool
 	AuthorID    uint
+	CategoryID  uint
 	// Author      Author `gorm:"foreignKey:AuthorID"`
 	Borrows []Borrow
 }

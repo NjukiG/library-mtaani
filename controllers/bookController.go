@@ -10,9 +10,13 @@ import (
 
 func PostNewBook(c *gin.Context) {
 	authorId := c.Param("id")
+	categoryId := c.Param("id")
+
 	var author models.Author
+	var category models.Category
 
 	myAuthor := initializers.DB.Preload("Books").First(&author, authorId)
+	myCategory := initializers.DB.Preload("Books").First(&category, categoryId)
 
 	if myAuthor.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -21,12 +25,21 @@ func PostNewBook(c *gin.Context) {
 		return
 	}
 
+	if myCategory.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Category not found",
+		})
+		return
+	}
+
 	var body struct {
+		// CategoryID  uint
 		Title       string
 		ImageUrl    string
 		Price       float64
 		Copies      int64
 		Description string
+		Trending    bool
 		// AuthorID    uint
 	}
 
@@ -44,7 +57,10 @@ func PostNewBook(c *gin.Context) {
 		Price:       body.Price,
 		Copies:      body.Copies,
 		Description: body.Description,
+		Trending:    body.Trending,
 		AuthorID:    author.ID,
+		CategoryID:  category.ID,
+
 		// Author:      author.Name,
 	}
 
@@ -115,6 +131,7 @@ func EditBookDetails(c *gin.Context) {
 		Copies      int64
 		Description string
 		AuthorID    uint
+		CategoryID  uint
 	}
 
 	if c.Bind(&body) != nil {
@@ -143,6 +160,7 @@ func EditBookDetails(c *gin.Context) {
 		Price:       body.Price,
 		Copies:      body.Copies,
 		Description: body.Description,
+		CategoryID:  body.CategoryID,
 		// AuthorID:    body.AuthorID,
 	})
 
