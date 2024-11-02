@@ -20,6 +20,12 @@ func RegisterRoutes(r *gin.Engine) {
 	{
 		protectedRoutes.GET("/api/validate", controllers.Validate)
 		protectedRoutes.POST("/api/logout", controllers.Logout)
+
+		// Categroy Routes
+		protectedRoutes.POST("/api/categories", controllers.AddNewCategory)
+		protectedRoutes.GET("/api/categories", controllers.GetAllCategories)
+		protectedRoutes.GET("/api/categories/:id", controllers.GetCategoryById)
+
 		// Author routes
 		protectedRoutes.POST("/api/authors", controllers.CreateAuthor)
 		protectedRoutes.GET("/api/authors", controllers.GetAllAuthors)
