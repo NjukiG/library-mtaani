@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github/NjukiG/library-mtaani/initializers"
 	"github/NjukiG/library-mtaani/models"
-	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -16,47 +16,55 @@ import (
 func RequireAuth(c *gin.Context) {
 	fmt.Println("In middleware function ...")
 
-	// Get the cookie of the req
+	// Get the cookie off req
 	tokenString, err := c.Cookie("Authorization")
 
 	if err != nil {
-		c.AbortWithStatus(http.StatusUnauthorized)
+		tokenString = c.Request.Header.Get("Authorization")
+		if tokenString == "" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "No token provided"})
+			return
+		}
+		if strings.HasPrefix(tokenString, "Bearer ") {
+			tokenString = strings.TrimPrefix(tokenString, "Bearer ")
+		}
 	}
 
-	// Decode/Validate it
+	// Decode/validate it
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		// Don't forget to validate the alg is what you expect:
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-		}
-
-		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
 		return []byte(os.Getenv("SECRET")), nil
 	})
 
 	if err != nil {
-		log.Fatal(err)
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		return
 	}
 
+	// Check the token claims
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-
-		// Check the exp
+		// Check the expiration
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
-			c.AbortWithStatus(http.StatusUnauthorized)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Token expired"})
+			return
 		}
 
-		// Find user within token sub
+		// Find the user with token sub
 		var user models.User
 		initializers.DB.First(&user, claims["sub"])
 
 		if user.ID == 0 {
-			c.AbortWithStatus(http.StatusUnauthorized)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
+			return
 		}
-		// Attach to req
+
+		// Attach to request
 		c.Set("user", user)
+
 		// Continue
 		c.Next()
 	} else {
-		c.AbortWithStatus(http.StatusUnauthorized)
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
 	}
+
+	/////////////////////////////////////////////////////////////////////
 }
