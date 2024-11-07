@@ -45,5 +45,13 @@ func RegisterRoutes(r *gin.Engine) {
 		protectedRoutes.GET("/api/borrows", controllers.GetBorrowedBooks)
 		protectedRoutes.POST("/api/borrows/return", controllers.ReturnBorrowedBooks)
 
+		// Cart Routes
+		protectedRoutes.POST("/api/cart/:id/items", controllers.AddItemToCart)
+		protectedRoutes.DELETE("/api/cart/:id/items/:book_id", controllers.RemoveItemFromCart)
+		protectedRoutes.PUT("/api/cart/:id/items/:book_id", controllers.UpdateCartItemQuantity)
+		protectedRoutes.GET("/api/cart/:id/items", controllers.ListCartItems)
+		protectedRoutes.DELETE("/api/cart/:id/clear", controllers.ClearCart)
+		protectedRoutes.GET("/api/cart/:id/review", controllers.ReviewCart)
+
 	}
 }

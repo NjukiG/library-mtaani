@@ -13,6 +13,8 @@ func SyncDatabase() {
 		&models.Book{},
 		&models.Borrow{},
 		&models.Category{},
+		&models.Cart{},
+		&models.CartItem{},
 	)
 
 	if err != nil {

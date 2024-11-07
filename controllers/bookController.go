@@ -36,7 +36,7 @@ func PostNewBook(c *gin.Context) {
 		// CategoryID  uint
 		Title       string
 		ImageUrl    string
-		Price       float64
+		Price       int
 		Copies      int64
 		Description string
 		Trending    bool
@@ -127,7 +127,7 @@ func EditBookDetails(c *gin.Context) {
 	var body struct {
 		Title       string
 		ImageUrl    string
-		Price       float64
+		Price       int
 		Copies      int64
 		Description string
 		AuthorID    uint

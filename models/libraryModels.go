@@ -28,7 +28,7 @@ type Book struct {
 	gorm.Model
 	Title       string
 	ImageUrl    string
-	Price       float64
+	Price       int
 	Copies      int64
 	Description string
 	Trending    bool
@@ -45,4 +45,21 @@ type Borrow struct {
 	DueDate string
 	Book    Book `gorm:"foreignKey:BookID"`
 	User    User `gorm:"foreignKey:UserID"`
+}
+
+// Cart Model
+type Cart struct {
+	gorm.Model
+	UserID    uint       `json:"user_id"`
+	CartItems []CartItem `json:"cart_items" gorm:"foreignKey:CartID;constraint:OnDelete:CASCADE;"`
+}
+
+// CartItem Model
+type CartItem struct {
+	gorm.Model
+	CartID   uint `json:"cart_id"`
+	BookID   uint `json:"book_id"`
+	Book     Book `json:"book" gorm:"foreignKey:BookID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Quantity int  `json:"quantity" gorm:"not null;default:1"`
+	UserID   uint `json:"user_id"`
 }
