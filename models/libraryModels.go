@@ -15,7 +15,7 @@ type Author struct {
 	gorm.Model
 	Name  string
 	Email string
-	Books []Book `gorm:"foreignKey:AuthorID"`
+	// Books []Book `gorm:"foreignKey:AuthorID"`
 }
 
 type Category struct {
@@ -32,7 +32,7 @@ type Book struct {
 	Copies      int64
 	Description string
 	Trending    bool
-	AuthorID    uint
+	// AuthorID    uint
 	CategoryID  uint
 	// Author      Author `gorm:"foreignKey:AuthorID"`
 	Borrows []Borrow

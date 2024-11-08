@@ -33,7 +33,7 @@ func RegisterRoutes(r *gin.Engine) {
 		protectedRoutes.DELETE("/api/authors/:id", controllers.DeleteAuthor)
 
 		// Book routes
-		protectedRoutes.POST("/api/authors/:id/books", controllers.PostNewBook)
+		protectedRoutes.POST("/api/books", controllers.PostNewBook)
 		protectedRoutes.GET("/api/books", controllers.GetAllBooks)
 		// protectedRoutes.GET("/api/authors/:id/books", controllers.GetAllBooks)
 		protectedRoutes.GET("/api/books/:id", controllers.GetBookById)
