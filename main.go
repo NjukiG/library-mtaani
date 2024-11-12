@@ -32,20 +32,9 @@ func main() {
 	}))
 
 	routes.RegisterRoutes(r)
-
-	// publicRoutes := r.Group("/public")
-	// {
-	// 	publicRoutes.POST("/api/register", controllers.Register)
-	// 	publicRoutes.POST("/api/login", controllers.Login)
-	// }
-
-	// protectedRoutes := r.Group("/protected")
-	// protectedRoutes.Use(middleware.RequireAuth)
-
-	// {
-	// 	protectedRoutes.GET("/api/validate", controllers.Validate)
-	// 	protectedRoutes.POST("/api/logout", controllers.Logout)
-	// }
+	routes.RegisterCategoryRoutes(r)
+	routes.RegisterBookRoutes(r)
+	routes.RegisterCartRoutes(r)
 
 	r.Run()
 }

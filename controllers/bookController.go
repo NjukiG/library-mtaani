@@ -129,6 +129,25 @@ func GetBookById(c *gin.Context) {
 	})
 }
 
+// Get books based on its category
+func GetBooksByCategory(c *gin.Context) {
+	categoryID := c.Param("id")
+	var books []models.Book
+
+	result := initializers.DB.Where("category_id = ?", categoryID).Find(&books)
+
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"Error": "Books with that category were not found",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"Books": books,
+	})
+}
+
 func EditBookDetails(c *gin.Context) {
 	bookId := c.Param("id")
 
