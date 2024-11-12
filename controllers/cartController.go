@@ -85,11 +85,13 @@ func AddItemToCart(c *gin.Context) {
 
 // Func to list all items in cart
 func ListCartItems(c *gin.Context) {
-	cartID := c.Param("id")
+	userId := c.Param("id")
+	// cartID := c.Param("id")
 
 	var cartItems []models.CartItem
 
-	resultItems := initializers.DB.Where("cart_id = ?", cartID).Preload("Book").Find(&cartItems)
+	// resultItems := initializers.DB.Where("cart_id = ?", cartID).Preload("Book").Find(&cartItems)
+	resultItems := initializers.DB.Where("user_id = ?", userId).Preload("Book").Find(&cartItems)
 
 	if resultItems.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{
