@@ -112,12 +112,13 @@ func ListCartItems(c *gin.Context) {
 
 // Func to remove an item from your cart
 func RemoveItemFromCart(c *gin.Context) {
-	cartID := c.Param("id")
+	// cartID := c.Param("id")
+	userID := c.Param("id")
 	bookID := c.Param("book_id")
 
 	var cartItem models.CartItem
 
-	resultItem := initializers.DB.Where("cart_id = ? AND book_id = ?", cartID, bookID).First(&cartItem)
+	resultItem := initializers.DB.Where("user_id = ? AND book_id = ?", userID, bookID).First(&cartItem)
 
 	if resultItem.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -182,9 +183,10 @@ func UpdateCartItemQuantity(c *gin.Context) {
 
 // Func to clear the whole cart
 func ClearCart(c *gin.Context) {
-	cartID := c.Param("id")
+	userID := c.Param("id")
+	// cartID := c.Param("id")
 
-	result := initializers.DB.Where("cart_id = ?", cartID).Delete(&models.CartItem{})
+	result := initializers.DB.Where("user_id = ?", userID).Delete(&models.CartItem{})
 
 	if result.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -200,11 +202,12 @@ func ClearCart(c *gin.Context) {
 
 // Func get all the details, price, quantities e.t.c
 func ReviewCart(c *gin.Context) {
-	cartID := c.Param("id")
+	userID := c.Param("id")
+	// cartID := c.Param("id")
 
 	var cartItems []models.CartItem
 
-	resultItems := initializers.DB.Where("cart_id = ?", cartID).Preload("Book").Find(&cartItems)
+	resultItems := initializers.DB.Where("user_id = ?", userID).Preload("Book").Find(&cartItems)
 
 	if resultItems.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{
