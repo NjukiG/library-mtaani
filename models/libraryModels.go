@@ -7,8 +7,10 @@ type User struct {
 	gorm.Model
 	Name     string
 	Role     string
-	Email    string `gorm:"unique"`
-	Password string `json:"-"`
+	Email    string   `gorm:"unique"`
+	Password string   `json:"-"`
+	Borrows  []Borrow `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE;"`
+	Cart     Cart     `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE;"`
 }
 
 type Author struct {
@@ -33,11 +35,12 @@ type Book struct {
 	Description string
 	Trending    bool
 	// AuthorID    uint
-	CategoryID  uint
+	CategoryID uint
 	// Author      Author `gorm:"foreignKey:AuthorID"`
 	Borrows []Borrow
 }
 
+// Borrow Model
 type Borrow struct {
 	gorm.Model
 	UserID  uint
@@ -62,4 +65,17 @@ type CartItem struct {
 	Book     Book `json:"book" gorm:"foreignKey:BookID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	Quantity int  `json:"quantity" gorm:"not null;default:1"`
 	UserID   uint `json:"user_id"`
+}
+
+// Shipping details
+type ShippingDetail struct {
+	gorm.Model
+	UserID      uint   `gorm:"unique;not null"`
+	Address     string `gorm:"not null"`
+	City        string `gorm:"not null"`
+	State       string `gorm:"not null"`
+	PostalCode  string `gorm:"not null"`
+	Country     string `gorm:"not null"`
+	PhoneNumber string `gorm:"not null"`
+	User        User   `gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
