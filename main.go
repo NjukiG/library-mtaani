@@ -36,6 +36,7 @@ func main() {
 	routes.RegisterBookRoutes(r)
 	routes.RegisterCartRoutes(r)
 	routes.RegisterShippingRoutes(r)
+	routes.RegisterOrderRoutes(r)
 
 	r.Run()
 }

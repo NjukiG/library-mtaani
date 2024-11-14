@@ -16,6 +16,8 @@ func SyncDatabase() {
 		&models.Cart{},
 		&models.CartItem{},
 		&models.ShippingDetail{},
+		&models.Order{},
+		&models.OrderItem{},
 	)
 
 	if err != nil {

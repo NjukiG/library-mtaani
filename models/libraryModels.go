@@ -79,3 +79,32 @@ type ShippingDetail struct {
 	PhoneNumber string `gorm:"not null"`
 	User        User   `gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
+
+type OrderStatus string
+
+const (
+	OrderPending   OrderStatus = "Pending"
+	OrderProcessed OrderStatus = "Processed"
+	OrderShipped   OrderStatus = "Shipped"
+	OrderDelivered OrderStatus = "Delivered"
+	OrderCancelled OrderStatus = "Cancelled"
+)
+
+type Order struct {
+	gorm.Model
+	UserID           uint
+	TotalPrice       int
+	Status           string         `gorm:"default:'pending'"`
+	ShippingDetail   ShippingDetail `gorm:"foreignKey:ShippingDetailID"`
+	ShippingDetailID uint
+	OrderItems       []OrderItem `gorm:"foreignKey:OrderID"`
+}
+
+type OrderItem struct {
+	gorm.Model
+	OrderID  uint
+	BookID   uint
+	Book     Book `gorm:"foreignKey:BookID"`
+	Quantity int
+	Price    int
+}
