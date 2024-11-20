@@ -160,3 +160,39 @@ func UpdateOrderStatus(c *gin.Context) {
 	// Respond with a success message
 	c.JSON(http.StatusOK, gin.H{"message": "Order status updated successfully", "order": order})
 }
+
+// Getting summary of the orders despite the users(total num of orders and revenue.) .
+func GetOrdersSummary(c *gin.Context) {
+	user, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	// Check if the user is an admin
+	if user.(models.User).Role != "Admin" {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Access denied"})
+		return
+	}
+
+	var totalOrders int64
+	var totalRevenue int64
+
+	// Count total orders
+	if err := initializers.DB.Model(&models.Order{}).Count(&totalOrders).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to count orders"})
+		return
+	}
+
+	// Calculate total revenue
+	if err := initializers.DB.Model(&models.Order{}).Select("SUM(total_price)").Scan(&totalRevenue).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to calculate total revenue"})
+		return
+	}
+
+	// Respond with the summary
+	c.JSON(http.StatusOK, gin.H{
+		"total_orders":  totalOrders,
+		"total_revenue": totalRevenue,
+	})
+}

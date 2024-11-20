@@ -16,6 +16,7 @@ func RegisterOrderRoutes(router *gin.Engine) {
 		protectedRoutes.POST("/api/cart/:id/orders", controllers.CreateOrder)
 		protectedRoutes.GET("/api/cart/:id/orders", controllers.GetOrders)
 		protectedRoutes.GET("/api/cart/:id/orders/:id", controllers.GetOrder)
+		protectedRoutes.GET("/api/:id/orders/summary", controllers.GetOrdersSummary)
 		// protectedRoutes.PUT("/orders/:order_id", controllers.UpdateOrderStatus)
 		// protectedRoutes.DELETE("/orders/:order_id", controllers.DeleteOrder)
 	}
