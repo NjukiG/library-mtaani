@@ -9,28 +9,8 @@ import (
 )
 
 func PostNewBook(c *gin.Context) {
-	// authorId := c.Param("id")
-	// categoryId := c.Param("id")
 
-	// var author models.Author
-	var category models.Category
-
-	// myAuthor := initializers.DB.Preload("Books").First(&author, authorId)
-	// myCategory := initializers.DB.Preload("Books").First(&category, categoryId)
-
-	// if myAuthor.Error != nil {
-	// 	c.JSON(http.StatusNotFound, gin.H{
-	// 		"error": "Author not found",
-	// 	})
-	// 	return
-	// }
-
-	// if myCategory.Error != nil {
-	// 	c.JSON(http.StatusNotFound, gin.H{
-	// 		"error": "Category not found",
-	// 	})
-	// 	return
-	// }
+	// var category models.Category
 
 	var body struct {
 		CategoryID  uint
@@ -51,12 +31,12 @@ func PostNewBook(c *gin.Context) {
 	}
 
 	// Fetch the category based on CategoryID from the body
-	if err := initializers.DB.First(&category, body.CategoryID).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Category not found",
-		})
-		return
-	}
+	// if err := initializers.DB.First(&category, body.CategoryID).Error; err != nil {
+	// 	c.JSON(http.StatusNotFound, gin.H{
+	// 		"error": "Category not found",
+	// 	})
+	// 	return
+	// }
 
 	user, _ := c.Get("user")
 	book := models.Book{
