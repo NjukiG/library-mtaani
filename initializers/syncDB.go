@@ -9,10 +9,10 @@ func SyncDatabase() {
 	// Sync the postgrs DB to create tables for the models
 	err := DB.AutoMigrate(
 		&models.User{},
+		&models.Category{},
 		&models.Author{},
 		&models.Book{},
 		&models.Borrow{},
-		&models.Category{},
 		&models.Cart{},
 		&models.CartItem{},
 		&models.ShippingDetail{},
