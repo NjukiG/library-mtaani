@@ -23,7 +23,7 @@ func main() {
 
 	// Apply CORS middleware
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://library-mtaani.netlify.app/"}, // Adjust this as needed
+		AllowOrigins:     []string{"https://library-mtaani.netlify.app"}, // Adjust this as needed
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
